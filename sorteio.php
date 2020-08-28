@@ -11,8 +11,8 @@ $loot = [
     'Mochila Elastic' => 1,
     'Kit de Vinho - Vinícola Stopassola' => 2,
     'Cortesia LPI Full' => 1, 
-    'Cortesia LPI 50%' => 1, 
-    'Cortesia LPI 25%' => 28, 
+    'Cortesia LPI 50%' => 3, 
+    'Cortesia LPI 25%' => 30, 
 ];
 
 clearstatcache();
@@ -33,7 +33,7 @@ $comEsperanca = array_values(array_unique($comEsperanca));
 printf('Total de participantes: %d%s', count($comEsperanca), PHP_EOL);
 
 foreach ($loot as $premio => $quantidade) {
-    if (preg_match('/LPI/', $premio) and $quantidade != 50) {
+    if (preg_match('/LPI/', $premio) and $quantidade != 30) {
         sortear($comEsperancaLPI, $premio, $quantidade);
     } else {
         sortear($comEsperanca, $premio, $quantidade);
@@ -52,6 +52,7 @@ function sortear(array &$pool, string $prize, int $times): void
 
         $winner = $pool[$index];
 
+        // Checagem dupla, por conta do sorteio especial das cortesias 100 e 50% do LPI
         if (in_array($winner, $comSorte)) {
             $t--;
             continue;
@@ -62,9 +63,10 @@ function sortear(array &$pool, string $prize, int $times): void
 
         $comSorte[] = $winner;
         
-        $msg = sprintf('Parabéns, participante de ID: %s!%s', trim($winner), PHP_EOL);
+        $show = substr($winner, 0, 3);
+        $msg = sprintf('Parabéns, participante #%s!%s', $show, PHP_EOL);
         echo $msg;
-        file_put_contents('./winners.txt', $prize . ' - ' . $winner, FILE_APPEND);
+        file_put_contents('./winners.txt', sprintf('%s - %s - %s', $show, $prize, $winner), FILE_APPEND);
 
         $pool = array_diff($pool, $comSorte);
     }
