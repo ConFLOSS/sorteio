@@ -21,14 +21,12 @@ $dataPool = glob('./data/*.txt');
 
 $comEsperanca = [];
 $comEsperancaLPI = file("./data/Tutorial: Aulão Linux Essentials (sala 4).txt");
-die(count($comEsperancaLPI) . PHP_EOL);
 
 $comSorte = [];
 
 foreach ($dataPool as $dataFile) {
     $comEsperanca = array_merge($comEsperanca, file($dataFile));
 }
-
 
 $comEsperanca = array_values(array_unique($comEsperanca));
 
